@@ -90,7 +90,7 @@ Include in your output the name of the court, and the name of the member
 formatted as a single column. Ensure no duplicate data, and order by
 the member name. */
 
- SELECT DISTINCT firstname, surname, name
+SELECT DISTINCT CONCAT( firstname, ' ', surname ) AS customer_name, name
 FROM Bookings AS b
 INNER JOIN Members AS m ON b.memid = m.memid
 INNER JOIN Facilities AS f ON b.facid = f.facid
@@ -103,7 +103,7 @@ the guest user's ID is always 0. Include in your output the name of the
 facility, the name of the member formatted as a single column, and the cost.
 Order by descending cost, and do not use any subqueries. */
 
- SELECT DISTINCT firstname, surname, name, guestcost * slots AS g_cost, membercost * slots AS m_cost
+ SELECT DISTINCT CONCAT( firstname, ' ', surname ) AS customer_name, name, guestcost * slots AS g_cost, membercost * slots AS m_cost
 FROM Bookings AS b
 INNER JOIN Members AS m ON b.memid = m.memid
 INNER JOIN Facilities AS f ON b.facid = f.facid
@@ -115,14 +115,14 @@ OR membercost * slots >30
 ORDER BY g_cost DESC , m_cost
 
 
-
 /* Q9: This time, produce the same result as in Q8, but using a subquery. */
 
 
- SELECT DISTINCT firstname, surname, name, guestcost * slots AS g_cost, membercost * slots AS m_cost
+SELECT DISTINCT CONCAT( firstname, ' ', surname ) AS customer_name, name, guestcost * slots AS g_cost, membercost * slots AS m_cost
 FROM Bookings AS b
 INNER JOIN Facilities AS f ON b.facid = f.facid, 
-        (SELECT firstname, surname
+        (
+        SELECT firstname, surname
         FROM Members AS m
         INNER JOIN Bookings AS b ON m.memid = b.memid
         WHERE starttime LIKE '2012-09-14%'
